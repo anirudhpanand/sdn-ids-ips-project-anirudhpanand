@@ -1,0 +1,65 @@
+%YAML 1.1
+---
+# Lab configuration: EXTERNAL_NET includes internal attackers in Mininet.
+vars:
+  address-groups:
+    HOME_NET: "[10.0.0.0/8,192.168.0.0/16]"
+    EXTERNAL_NET: "any"
+  port-groups:
+    HTTP_PORTS: "[80,8080]"
+
+classification-file: config/classification.config
+default-rule-path: /etc/suricata/rules
+# The launch scripts pass the repository's custom rules with `-S`.
+default-log-dir: logs/suricata
+runmode: workers
+max-pending-packets: 1024
+stats:
+  enabled: yes
+  interval: 5
+outputs:
+  - eve-log:
+      enabled: yes
+      filetype: regular
+      filename: eve.json
+      types:
+        - alert
+        - flow
+        - stats
+logging:
+  default-log-level: notice
+  outputs:
+    - console:
+        enabled: yes
+
+af-packet:
+  - interface: s1-eth2
+    threads: 1
+    cluster-id: 99
+    cluster-type: cluster_flow
+    defrag: yes
+
+stream:
+  memcap: 64mb
+  # Virtual interfaces can expose packets before checksum offload completes.
+  checksum-validation: no
+  reassembly:
+    memcap: 128mb
+    depth: 1mb
+app-layer:
+  protocols:
+    http:
+      enabled: yes
+      libhtp:
+        default-config:
+          personality: IDS
+          request-body-limit: 100kb
+    ssh:
+      enabled: yes
+    tls:
+      enabled: yes
+    dns:
+      tcp:
+        enabled: yes
+      udp:
+        enabled: yes
