@@ -1,0 +1,13 @@
+# Application and offline demo (Python 3.10–3.12 recommended)
+Flask>=3.0,<4
+Flask-SocketIO>=5.3.6,<6
+SQLAlchemy>=2.0.30,<3
+requests>=2.31,<3
+psutil>=5.9,<8
+numpy>=1.24,<3
+scikit-learn>=1.4,<1.8
+joblib>=1.3,<2
+PyYAML>=6,<7
+scapy>=2.6,<3
+python-nmap==0.7.1
+paramiko>=3.4,<6
